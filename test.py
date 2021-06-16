@@ -15,12 +15,24 @@ def main():
     la.normalize()
     #la.write(outputDir)
 
-    bv = None
+    dims = (64, 64, 64)
+    data = np.zeros((dims[0], dims[1], dims[2]), dtype=bool)
+    translate = (0, 0, 0)
+    scale = 1
+    axis_order = 'xyz'
+    bv = Voxels(data, dims, translate, scale, axis_order)
+    '''
     with open('chair.binvox', 'rb') as f:
         bv = read_as_3d_array(f)
         print(bv.data)
+    '''
 
-    with open('chair_out.binvox', 'wb') as f:
+    for x in range(0, len(data)):
+    	for y in range(0, len(data[x])):
+    		for z in range(0, len(data[x][y])):
+    			data[x][y][z] = True
+
+    with open('test.binvox', 'wb') as f:
         bv.write(f)
 
 print("Reading from : " + inputDir)
