@@ -10,12 +10,18 @@ inputDir = argv[0]
 outputDir = argv[1]
 
 def main():
+    la = Latk(inputDir)
+    la.clean()
+    la.normalize()
+    #la.write(outputDir)
+
+    bv = None
     with open('chair.binvox', 'rb') as f:
-        m1 = read_as_3d_array(f)
-        print(m1.data)
-    #data = Latk(inputDir)
-    #data.clean()
-    #data.write(outputDir)
+        bv = read_as_3d_array(f)
+        print(bv.data)
+
+    with open('chair_out.binvox', 'wb') as f:
+        bv.write(f)
 
 print("Reading from : " + inputDir)
 print("Writing to: " + outputDir)
