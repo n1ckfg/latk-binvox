@@ -19,7 +19,7 @@ def main():
     data = np.zeros((dims[0], dims[1], dims[2]), dtype=bool)
     translate = (0, 0, 0)
     scale = 1
-    axis_order = 'xyz'
+    axis_order = 'xzy'
     bv = Voxels(data, dims, translate, scale, axis_order)
     '''
     with open('chair.binvox', 'rb') as f:
@@ -27,10 +27,20 @@ def main():
         print(bv.data)
     '''
 
+    '''
     for x in range(0, len(data)):
-    	for y in range(0, len(data[x])):
-    		for z in range(0, len(data[x][y])):
-    			data[x][y][z] = True
+        for y in range(0, len(data[x])):
+            for z in range(0, len(data[x][y])):
+                data[x][y][z] = True
+    '''
+    for layer in la.layers:
+        for frame in layer.frames:
+            for stroke in frame.strokes:
+                for point in stroke.points:
+                    x = int(point.co[0] * (dims[0]-1))
+                    y = int(point.co[1] * (dims[1]-1))
+                    z = int(point.co[2] * (dims[2]-1))
+                    data[x][y][z] = True
 
     with open('test.binvox', 'wb') as f:
         bv.write(f)
