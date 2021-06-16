@@ -10,8 +10,8 @@ inputDir = argv[0]
 outputDir = argv[1]
 
 def main():
-    model = binvox_rw.read_binvox('chair.binvox')
-    model.voxels
+    with open('chair.binvox', 'rb') as f:
+        m1 = binvox_rw.read_as_3d_array(f)
     #data = Latk(inputDir)
     #data.clean()
     #data.write(outputDir)

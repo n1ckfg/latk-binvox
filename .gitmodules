@@ -1,3 +1,6 @@
 [submodule "latk"]
 	path = latk
 	url = https://github.com/LightningArtist/latk.py
+[submodule "binvox_rw"]
+	path = binvox_rw
+	url = https://github.com/n1ckfg/binvox-rw-py
