@@ -15,7 +15,8 @@ def main():
     la.normalize()
     #la.write(outputDir)
 
-    dims = (64, 64, 64)
+    dim = 128
+    dims = (dim, dim, dim)
     data = np.zeros((dims[0], dims[1], dims[2]), dtype=bool)
     translate = (0, 0, 0)
     scale = 1
@@ -42,7 +43,7 @@ def main():
                     z = int(point.co[2] * (dims[2]-1))
                     data[x][y][z] = True
 
-    with open('test.binvox', 'wb') as f:
+    with open(outputDir, 'wb') as f:
         bv.write(f)
 
 print("Reading from : " + inputDir)
