@@ -2,6 +2,7 @@ import sys
 
 from latk.latk import *
 from binvox_rw.binvox_rw import *
+from kmeans import *
 
 argv = sys.argv
 argv = argv[argv.index("--") + 1:] # get all args after "--"
