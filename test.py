@@ -9,7 +9,7 @@ argv = argv[argv.index("--") + 1:] # get all args after "--"
 inputDir = argv[0]
 outputDir = argv[1]
 
-dim = 128
+dim = 64
 drawReps = dim #* dim 
 
 def lerp(a, b, f): 
