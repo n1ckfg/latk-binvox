@@ -12,6 +12,11 @@ outputDir = argv[1]
 
 dim = 64
 drawReps = dim #* dim 
+kmeans = None
+doFill = True
+allPoints = []
+numCentroids = 20
+numFillReps = 5
 
 def lerp(a, b, f): 
     return (a * (1.0 - f)) + (b * f)
@@ -60,10 +65,13 @@ def main():
     for layer in la.layers:
         for frame in layer.frames:
             for stroke in frame.strokes:
-                for i in range(1, len(stroke.points)):
-                    p1 = stroke.points[i].co
-                    p2 = stroke.points[i-1].co
-                    drawLine(data, dims, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2])
+                if (len(stroke.points) > 1):
+                    allPoints.append(stroke.points[0].co)
+                    for i in range(1, len(stroke.points)):
+                        allPoints.append(stroke.points[i].co)
+                        p1 = stroke.points[i].co
+                        p2 = stroke.points[i-1].co
+                        drawLine(data, dims, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2])
                 '''
                 for point in stroke.points:
                     x = int(point.co[0] * (dims[0]-1))
@@ -71,6 +79,7 @@ def main():
                     z = int(point.co[2] * (dims[2]-1))
                     data[x][y][z] = True
                 '''
+    kmeans = Kmeans(allPoints, numCentroids)
 
     with open(outputDir, 'wb') as f:
         bv.write(f)

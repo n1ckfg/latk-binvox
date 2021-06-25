@@ -1,5 +1,7 @@
 # based on https:#openprocessing.org/sketch/51404/
 
+from random import uniform as random
+
 class Kmeans(object):
     def __init__(self, _points, _numCentroids): # ArrayList<PVector>, int
         self.particles = [] # ArrayList<Particle>
@@ -18,21 +20,20 @@ class Kmeans(object):
         self.stableThreshold = 0.0001
         self.ready = False
         
-        for i in range(0, len(_points)):
-            p = _points[i] # PVector
-            if (p.x < minX):
-                minX = p.x
-            if (p.x > maxX):
-                maxX = p.x
-            if (p.y < minY):
-                minY = p.y
-            if (p.y > maxY):
-                maxY = p.y
-            if (p.z < minZ):
-                minZ = p.z
-            if (p.z > maxZ):
-                maxZ = p.z
-            particles.append(Particle(p))
+        for p in _points:
+            if (p[0] < self.minX):
+                self.minX = p[0]
+            if (p[0] > self.maxX):
+                self.maxX = p[0]
+            if (p[1] < self.minY):
+                self.minY = p[1]
+            if (p[1] > self.maxY):
+                self.maxY = p[1]
+            if (p[2] < self.minZ):
+                self.minZ = p[2]
+            if (p[2] > self.maxZ):
+                self.maxZ = p[2]
+            self.particles.append(Particle(p))
         
         self.init()
     
@@ -42,8 +43,8 @@ class Kmeans(object):
         self.clusters.clear()
     
         for i in range(0, self.numberOfCentroids):
-            c = Centroid(i, 127+random(127), 127+random(127), 127+random(127), self.minX, self.maxX, self.minY, self.maxY, self.minZ, self.maxZ)
-            centroids.append(c)
+            c = Centroid(i, 127+random(0,127), 127+random(0,127), 127+random(0,127), self.minX, self.maxX, self.minY, self.maxY, self.minZ, self.maxZ)
+            self.centroids.append(c)
         
     def update(self):
         for particle in self.particles: 
