@@ -26,7 +26,7 @@ class Kmeans(object):
             if (p.y > maxY) maxY = p.y
             if (p.z < minZ) minZ = p.z
             if (p.z > maxZ) maxZ = p.z
-            particles.append(new Particle(p))
+            particles.append(Particle(p))
         
         self.init()
     
@@ -36,7 +36,7 @@ class Kmeans(object):
         self.clusters.clear()
     
         for i in range(0, self.numberOfCentroids):
-            c = new Centroid(i, 127+random(127), 127+random(127), 127+random(127), self.minX, self.maxX, self.minY, self.maxY, self.minZ, self.maxZ)
+            c = Centroid(i, 127+random(127), 127+random(127), 127+random(127), self.minX, self.maxX, self.minY, self.maxY, self.minZ, self.maxZ)
             centroids.append(c)
         
     def update(self):
@@ -52,7 +52,7 @@ class Kmeans(object):
         if (self.totalStability < self.stableThreshold):
             for centroid in self.centroids:
                 p = centroid.position # PVector
-                self.clusters.append(new Cluster(p))
+                self.clusters.append(Cluster(p))
                 self.centroidFinalPositions.append(p)
             
             for particle in self.particles:
@@ -91,7 +91,7 @@ class Centroid(object):
     def update(self, _particles): # ArrayList<Particle>
         #println("-----------------------")
         #println("K-Means Centroid Tick")
-        # move the centroid to its new position
+        # move the centroid to its position
 
         newPosition = (0.0, 0.0, 0.0)
 
@@ -99,11 +99,13 @@ class Centroid(object):
 
         for curParticle in _particles:
             if (curParticle.centroidIndex == self.internalIndex):
-                newPosition.append(curParticle.position) 
+                newPosition[0] += curParticle.position[0]
+                newPosition[1] += curParticle.position[1]
+                newPosition[2] += curParticle.position[2]
                 numberOfAssociatedParticles += 1
 
-        newPosition.div(numberOfAssociatedParticles)
-        self.stability = position.dist(newPosition)
+        newPosition = (newPosition[0] / numberOfAssociatedParticles, newPosition[1] / numberOfAssociatedParticles, newPosition[2] / numberOfAssociatedParticles)
+        self.stability = dist(position, newPosition)
         self.position = newPosition
 
     '''
@@ -136,7 +138,7 @@ class Particle(object):
         for i in range(0, len(_centroids)):             
             curCentroid = _centroids[i] # Centroid
 
-            distanceCheck = position.dist(curCentroid.position) # float
+            distanceCheck = dist(position, curCentroid.position) # float
 
             if (distanceCheck < closestDistance):
                 closestCentroidIndex = i
