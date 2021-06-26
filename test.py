@@ -13,7 +13,7 @@ inputPath = argv[0]
 dim = 128
 drawReps = dim #* dim 
 allPoints = []
-numCentroids = 20
+numCentroids = 40
 numFillReps = 5
 
 def lerp(a, b, f): 
@@ -37,16 +37,13 @@ def drawLine(data, dims, x1, y1, z1, x2, y2, z2):
         data[x][y][z] = True
 
 def main():
-    print("Reading from : " + inputPath)
-
-    la = Latk(inputPath)
-    la.clean()
-    la.normalize()
-    #la.write(outputPath)
-
     doFill = True
     doDilate = True
-    dilateReps = 10
+    dilateReps = 5
+    doErode = True
+    erodeReps = 1
+    doClean = False
+    doNorm = True
     dims = (dim, dim, dim)
     data = np.zeros((dims[0], dims[1], dims[2]), dtype=bool)
     translate = (0, 0, 0)
@@ -65,6 +62,21 @@ def main():
             for z in range(0, len(data[x][y])):
                 data[x][y][z] = True
     '''
+    print("Reading from : " + inputPath)
+
+    la = Latk(inputPath)
+
+    if (doNorm):
+        print("Normalizing...")
+        la.normalize()
+
+    # clean after normalize so min distance between points is known
+    if (doClean):
+        print("Cleaning...")
+        la.clean()
+
+    #la.write(outputPath)
+
     for layer in la.layers:
         for frame in layer.frames:
             for stroke in frame.strokes:
@@ -111,8 +123,14 @@ def main():
             doFill = False
 
     if (doDilate):
+        print("Dilating...")
         for i in range(0, dilateReps):
             scipy.ndimage.binary_dilation(bv.data.copy(), output=bv.data)
+
+    if (doErode):
+        print("Eroding...")
+        for i in range(0, erodeReps):
+            scipy.ndimage.binary_erosion(bv.data.copy(), output=bv.data)
 
     print("Writing to: " + url2)
     with open(url2, 'wb') as f:
