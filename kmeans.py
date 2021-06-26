@@ -131,11 +131,11 @@ class Centroid(object):
 class Particle(object):
     def __init__(self, _position): # PVector
         self.position = _position # PVector
-        self.velocity # PVector
-        self.centroidIndex # int
-        self.colorR # float
-        self.colorG # float
-        self.colorB # float
+        self.velocity = (0.0,0.0,0.0) # PVector
+        self.centroidIndex = 0 # int
+        self.colorR = 0.0
+        self.colorG = 0.0
+        self.colorB = 0.0
         self.brightness = 0.8
     
     def FindClosestCentroid(self, _centroids): # ArrayList<Centroid> 
