@@ -1,5 +1,6 @@
 import sys
 
+import scipy.ndimage
 from latk.latk import *
 from binvox_rw.binvox_rw import *
 from kmeans import *
@@ -10,9 +11,8 @@ argv = argv[argv.index("--") + 1:] # get all args after "--"
 inputDir = argv[0]
 outputDir = argv[1]
 
-dim = 64
+dim = 128
 drawReps = dim #* dim 
-kmeans = None
 allPoints = []
 numCentroids = 20
 numFillReps = 5
@@ -44,6 +44,8 @@ def main():
     #la.write(outputDir)
 
     doFill = True
+    doDilate = True
+    dilateReps = 3
     dims = (dim, dim, dim)
     data = np.zeros((dims[0], dims[1], dims[2]), dtype=bool)
     translate = (0, 0, 0)
@@ -94,6 +96,10 @@ def main():
                         drawLine(data, dims, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2])
 
             doFill = False
+
+    if (doDilate):
+        for i in range(0, dilateReps):
+            scipy.ndimage.binary_dilation(bv.data.copy(), output=bv.data)
 
     with open(outputDir, 'wb') as f:
         bv.write(f)
