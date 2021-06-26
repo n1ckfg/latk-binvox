@@ -10,7 +10,10 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $DIR
 
-INPUT=examples/layer_test.latk
-OUTPUT=test.binvox
+INPUT_DIR="examples"
 
-python test.py -- $DIR/$INPUT $DIR/$OUTPUT
+for INPUT in "$DIR/$INPUT_DIR"/*.latk
+do
+  python test.py -- $INPUT
+done
+

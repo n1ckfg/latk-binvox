@@ -8,8 +8,7 @@ from kmeans import *
 argv = sys.argv
 argv = argv[argv.index("--") + 1:] # get all args after "--"
 
-inputDir = argv[0]
-outputDir = argv[1]
+inputPath = argv[0]
 
 dim = 128
 drawReps = dim #* dim 
@@ -38,12 +37,12 @@ def drawLine(data, dims, x1, y1, z1, x2, y2, z2):
         data[x][y][z] = True
 
 def main():
-    print("Reading from : " + inputDir)
+    print("Reading from : " + inputPath)
 
-    la = Latk(inputDir)
+    la = Latk(inputPath)
     la.clean()
     la.normalize()
-    #la.write(outputDir)
+    #la.write(outputPath)
 
     doFill = True
     doDilate = True
@@ -84,9 +83,9 @@ def main():
                     data[x][y][z] = True
                 '''
     url = ""
-    outputDirArray = outputDir.split(".")
-    for i in range(0, len(outputDirArray)-1):
-        url += outputDirArray[i]
+    outputPathArray = inputPath.split(".")
+    for i in range(0, len(outputPathArray)-1):
+        url += outputPathArray[i]
 
     url1 = url + "-stroke.binvox"
     url2 = url + "-fill.binvox"
