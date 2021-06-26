@@ -38,6 +38,8 @@ def drawLine(data, dims, x1, y1, z1, x2, y2, z2):
         data[x][y][z] = True
 
 def main():
+    print("Reading from : " + inputDir)
+
     la = Latk(inputDir)
     la.clean()
     la.normalize()
@@ -81,6 +83,18 @@ def main():
                     z = int(point.co[2] * (dims[2]-1))
                     data[x][y][z] = True
                 '''
+    url = ""
+    outputDirArray = outputDir.split(".")
+    for i in range(0, len(outputDirArray)-1):
+        url += outputDirArray[i]
+
+    url1 = url + "-stroke.binvox"
+    url2 = url + "-fill.binvox"
+
+    print("Writing to: " + url1)
+    with open(url1, 'wb') as f:
+        bv.write(f)
+
     kmeans = Kmeans(allPoints, numCentroids)
 
     while (doFill == True):
@@ -101,10 +115,8 @@ def main():
         for i in range(0, dilateReps):
             scipy.ndimage.binary_dilation(bv.data.copy(), output=bv.data)
 
-    with open(outputDir, 'wb') as f:
+    print("Writing to: " + url2)
+    with open(url2, 'wb') as f:
         bv.write(f)
-
-print("Reading from : " + inputDir)
-print("Writing to: " + outputDir)
 
 main()
