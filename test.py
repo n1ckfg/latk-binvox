@@ -13,7 +13,6 @@ outputDir = argv[1]
 dim = 64
 drawReps = dim #* dim 
 kmeans = None
-doFill = True
 allPoints = []
 numCentroids = 20
 numFillReps = 5
@@ -44,6 +43,7 @@ def main():
     la.normalize()
     #la.write(outputDir)
 
+    doFill = True
     dims = (dim, dim, dim)
     data = np.zeros((dims[0], dims[1], dims[2]), dtype=bool)
     translate = (0, 0, 0)
@@ -80,6 +80,20 @@ def main():
                     data[x][y][z] = True
                 '''
     kmeans = Kmeans(allPoints, numCentroids)
+
+    while (doFill == True):
+        if (kmeans.ready == False):
+            kmeans.run()
+        else:     
+            for cluster in kmeans.clusters:
+                for i in range(0, len(cluster.points)):
+                    p1 = cluster.points[i]
+                    for j in range(0, numFillReps):
+                        index = int(random(0, len(cluster.points)))
+                        p2 = cluster.points[index]
+                        drawLine(data, dims, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2])
+
+            doFill = False
 
     with open(outputDir, 'wb') as f:
         bv.write(f)

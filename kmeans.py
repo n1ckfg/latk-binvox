@@ -2,6 +2,11 @@
 
 from random import uniform as random
 
+def dist(p1, p2):
+    [x1,y1,z1] = p1
+    [x2,y2,z2] = p2    
+    return (((x2-x1)**2)+((y2-y1)**2)+((z2-z1)**2))**(1/2)     
+
 class Kmeans(object):
     def __init__(self, _points, _numCentroids): # ArrayList<PVector>, int
         self.particles = [] # ArrayList<Particle>
@@ -64,7 +69,7 @@ class Kmeans(object):
                 self.centroidFinalPositions.append(p)
             
             for particle in self.particles:
-                self.clusters.get(particle.centroidIndex).points.append(particle.position)
+                self.clusters[particle.centroidIndex].points.append(particle.position)
             
             self.ready = True
         
@@ -107,13 +112,17 @@ class Centroid(object):
 
         for curParticle in _particles:
             if (curParticle.centroidIndex == self.internalIndex):
-                newPosition[0] += curParticle.position[0]
-                newPosition[1] += curParticle.position[1]
-                newPosition[2] += curParticle.position[2]
+                x = newPosition[0] + curParticle.position[0]
+                y = newPosition[1] + curParticle.position[1]
+                z = newPosition[2] + curParticle.position[2]
+                newPosition = (x, y, z)
                 numberOfAssociatedParticles += 1
 
+        if (numberOfAssociatedParticles < 1):
+            numberOfAssociatedParticles = 1
+
         newPosition = (newPosition[0] / numberOfAssociatedParticles, newPosition[1] / numberOfAssociatedParticles, newPosition[2] / numberOfAssociatedParticles)
-        self.stability = dist(position, newPosition)
+        self.stability = dist(self.position, newPosition)
         self.position = newPosition
 
     '''
@@ -146,7 +155,7 @@ class Particle(object):
         for i in range(0, len(_centroids)):             
             curCentroid = _centroids[i] # Centroid
 
-            distanceCheck = dist(position, curCentroid.position) # float
+            distanceCheck = dist(self.position, curCentroid.position) # float
 
             if (distanceCheck < closestDistance):
                 closestCentroidIndex = i
@@ -156,7 +165,7 @@ class Particle(object):
         self.centroidIndex = closestCentroidIndex
 
         # and grab the color for the visualization        
-        curCentroid = _centroids[centroidIndex] # Centroid 
+        curCentroid = _centroids[self.centroidIndex] # Centroid 
         self.colorR = curCentroid.colorR * self.brightness
         self.colorG = curCentroid.colorG * self.brightness
         self.colorB = curCentroid.colorB * self.brightness
