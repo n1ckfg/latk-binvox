@@ -4,6 +4,7 @@ import scipy.ndimage
 from latk.latk import *
 from binvox_rw.binvox_rw import *
 from kmeans import *
+import h5py
 
 argv = sys.argv
 argv = argv[argv.index("--") + 1:] # get all args after "--"
@@ -99,12 +100,17 @@ def main():
     for i in range(0, len(outputPathArray)-1):
         url += outputPathArray[i]
 
-    url1 = url + "-stroke.binvox"
-    url2 = url + "-fill.binvox"
+    url1 = url + ".seg" #"-stroke.binvox"
+    url2 = url + ".im" #"-fill.binvox"
 
     print("Writing to: " + url1)
-    with open(url1, 'wb') as f:
-        bv.write(f)
+    #with open(url1, 'wb') as f:
+        #bv.write(f)
+    voxel_data = bv.data.astype(np.float)
+    f = h5py.File(url1, 'w')
+    f.create_dataset('data', data = voxel_data)
+    f.flush()
+    f.close()
 
     kmeans = Kmeans(allPoints, numCentroids)
 
@@ -133,7 +139,12 @@ def main():
             scipy.ndimage.binary_erosion(bv.data.copy(), output=bv.data)
 
     print("Writing to: " + url2)
-    with open(url2, 'wb') as f:
-        bv.write(f)
+    #with open(url2, 'wb') as f:
+        #bv.write(f)
+    voxel_data = bv.data.astype(np.float)
+    f = h5py.File(url2, 'w')
+    f.create_dataset('data', data = voxel_data)
+    f.flush()
+    f.close()
 
 main()
