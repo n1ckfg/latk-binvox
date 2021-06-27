@@ -100,14 +100,17 @@ def main():
     for i in range(0, len(outputPathArray)-1):
         url += outputPathArray[i]
 
-    url1 = url + ".seg" #"-stroke.binvox"
-    url2 = url + ".im" #"-fill.binvox"
+    url1a = url + "-stroke.binvox"
+    url1b = url + ".seg"
+    url2a = url + "-fill.binvox"
+    url2b = url + ".im"
 
-    print("Writing to: " + url1)
-    #with open(url1, 'wb') as f:
-        #bv.write(f)
+    print("Writing to: " + url1a)
+    with open(url1a, 'wb') as f:
+        bv.write(f)
+    print("Writing to: " + url1b)
     voxel_data = bv.data.astype(np.float)
-    f = h5py.File(url1, 'w')
+    f = h5py.File(url1b, 'w')
     f.create_dataset('data', data = voxel_data)
     f.flush()
     f.close()
@@ -138,11 +141,12 @@ def main():
         for i in range(0, erodeReps):
             scipy.ndimage.binary_erosion(bv.data.copy(), output=bv.data)
 
-    print("Writing to: " + url2)
-    #with open(url2, 'wb') as f:
-        #bv.write(f)
+    print("Writing to: " + url2a)
+    with open(url2a, 'wb') as f:
+        bv.write(f)
+    print("Writing to: " + url2b)
     voxel_data = bv.data.astype(np.float)
-    f = h5py.File(url2, 'w')
+    f = h5py.File(url2b, 'w')
     f.create_dataset('data', data = voxel_data)
     f.flush()
     f.close()

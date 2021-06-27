@@ -4,4 +4,5 @@
 *.zip
 *.binvox
 *.obj
+test_set/*
 
