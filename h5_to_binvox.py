@@ -22,7 +22,7 @@ def write_binvox(data, path):
     translate = [0, 0, 0]
     scale = 1.0
     axis_order = 'xzy'
-    v = binvox_rw.Voxels( data, dims, translate, scale, axis_order)
+    v = binvox_rw.Voxels(data, dims, translate, scale, axis_order)
 
     with open(path, 'bw') as f:
         v.write(f)
