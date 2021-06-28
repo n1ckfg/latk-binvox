@@ -1,5 +1,5 @@
 import sys
-
+import numpy as np
 import scipy.ndimage
 from latk.latk import *
 from binvox_rw.binvox_rw import *
