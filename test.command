@@ -14,6 +14,6 @@ INPUT_DIR="test_set"
 
 for INPUT in "$DIR/$INPUT_DIR"/*.latk
 do
-  python test.py -- $INPUT
+  python3 test.py -- $INPUT
 done
 

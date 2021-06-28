@@ -17,4 +17,4 @@ git submodule foreach git checkout master
 git submodule foreach git reset --hard
 git submodule foreach git pull origin master
 
-sudo pip install -r requirements.txt
+sudo pip3 install -r requirements.txt
