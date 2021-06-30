@@ -106,14 +106,10 @@ def main():
     url2b = url + ".im"
 
     print("Writing to: " + url1a)
-    with open(url1a, 'wb') as f:
-        bv.write(f)
+    saveAsBinvox(bv, url1a)
+    
     print("Writing to: " + url1b)
-    voxel_data = bv.data.astype(np.float)
-    f = h5py.File(url1b, 'w')
-    f.create_dataset('data', data = voxel_data)
-    f.flush()
-    f.close()
+    saveAsH5(bv, url1b)
 
     kmeans = Kmeans(allPoints, numCentroids)
 
@@ -142,13 +138,21 @@ def main():
             scipy.ndimage.binary_erosion(bv.data.copy(), output=bv.data)
 
     print("Writing to: " + url2a)
-    with open(url2a, 'wb') as f:
-        bv.write(f)
+    saveAsBinvox(bv, url2a)
+    
     print("Writing to: " + url2b)
+    saveAsH5(bv, url2b)
+
+def saveAsBinvox(bv, url):
+    with open(url, 'wb') as f:
+        bv.write(f)
+
+def saveAsH5(bv, url):
     voxel_data = bv.data.astype(np.float)
-    f = h5py.File(url2b, 'w')
-    f.create_dataset('data', data = voxel_data)
+    f = h5py.File(url, 'w')
+    # more compression options: https://docs.h5py.org/en/stable/high/dataset.html
+    f.create_dataset('data', data=voxel_data, compression='gzip')
     f.flush()
-    f.close()
+    f.close()	
 
 main()
