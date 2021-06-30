@@ -38,6 +38,9 @@ def drawLine(data, dims, x1, y1, z1, x2, y2, z2):
         data[x][y][z] = True
 
 def main():
+    saveBinvox = False
+    saveH5 = True
+
     doFill = True
     doDilate = True
     dilateReps = 5
@@ -105,11 +108,13 @@ def main():
     url2a = url + "-fill.binvox"
     url2b = url + ".im"
 
-    print("Writing to: " + url1a)
-    saveAsBinvox(bv, url1a)
+    if (saveBinvox == True):
+        print("Writing to: " + url1a)
+        saveAsBinvox(bv, url1a)
     
-    print("Writing to: " + url1b)
-    saveAsH5(bv, url1b)
+    if (saveH5 == True):
+        print("Writing to: " + url1b)
+        saveAsH5(bv, url1b)
 
     kmeans = Kmeans(allPoints, numCentroids)
 
@@ -137,11 +142,13 @@ def main():
         for i in range(0, erodeReps):
             scipy.ndimage.binary_erosion(bv.data.copy(), output=bv.data)
 
-    print("Writing to: " + url2a)
-    saveAsBinvox(bv, url2a)
+    if (saveBinvox == True):
+        print("Writing to: " + url2a)
+        saveAsBinvox(bv, url2a)
     
-    print("Writing to: " + url2b)
-    saveAsH5(bv, url2b)
+    if (saveH5 == True):
+        print("Writing to: " + url2b)
+        saveAsH5(bv, url2b)
 
 def saveAsBinvox(bv, url):
     with open(url, 'wb') as f:
@@ -153,6 +160,6 @@ def saveAsH5(bv, url):
     # more compression options: https://docs.h5py.org/en/stable/high/dataset.html
     f.create_dataset('data', data=voxel_data, compression='gzip')
     f.flush()
-    f.close()	
+    f.close()    
 
 main()
