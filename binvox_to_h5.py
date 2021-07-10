@@ -74,7 +74,8 @@ def read_all_binvox(directory):
 def convert_h5(in_path, out_path):
     data = read_binvox(in_path)
     f = h5py.File(out_path, 'w')
-    f.create_dataset('data', data = data)
+    # more compression options: https://docs.h5py.org/en/stable/high/dataset.html
+    f.create_dataset('data', data = data, compression='gzip')
     f.flush()
     f.close()
 
