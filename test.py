@@ -41,9 +41,9 @@ def main():
     saveBinvox = True
     saveH5 = True
 
-    doFill = True
+    doFill = False
     #doDilate = True
-    dilateReps = 2
+    dilateReps = 5
     #doErode = True
     erodeReps = 1
     doClean = False
