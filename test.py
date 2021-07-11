@@ -38,13 +38,13 @@ def drawLine(data, dims, x1, y1, z1, x2, y2, z2):
         data[x][y][z] = True
 
 def main():
-    saveBinvox = False
+    saveBinvox = True
     saveH5 = True
 
     doFill = True
-    doDilate = True
-    dilateReps = 5
-    doErode = True
+    #doDilate = True
+    dilateReps = 2
+    #doErode = True
     erodeReps = 1
     doClean = False
     doNorm = True
@@ -132,12 +132,12 @@ def main():
 
             doFill = False
 
-    if (doDilate):
+    if (dilateReps > 0):
         print("Dilating...")
         for i in range(0, dilateReps):
             scipy.ndimage.binary_dilation(bv.data.copy(), output=bv.data)
 
-    if (doErode):
+    if (erodeReps > 0):
         print("Eroding...")
         for i in range(0, erodeReps):
             scipy.ndimage.binary_erosion(bv.data.copy(), output=bv.data)
