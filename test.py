@@ -43,9 +43,9 @@ def main():
 
     doFill = False
     #doDilate = True
-    dilateReps = 5
+    dilateReps = 4
     #doErode = True
-    erodeReps = 1
+    erodeReps = 0
     doClean = False
     doNorm = True
     dims = (dim, dim, dim)
