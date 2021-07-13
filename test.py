@@ -43,7 +43,7 @@ def main():
 
     doFill = False
     #doDilate = True
-    dilateReps = 4
+    dilateReps = 2
     #doErode = True
     erodeReps = 0
     doClean = False
