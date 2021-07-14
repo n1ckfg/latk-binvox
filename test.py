@@ -11,7 +11,7 @@ argv = argv[argv.index("--") + 1:] # get all args after "--"
 
 inputPath = argv[0]
 
-dim = 128
+dim = 256
 drawReps = dim #* dim 
 allPoints = []
 numCentroids = 40
@@ -43,9 +43,9 @@ def main():
 
     doFill = False
     #doDilate = True
-    dilateReps = 2
+    dilateReps = 10
     #doErode = True
-    erodeReps = 0
+    erodeReps = 2
     doClean = False
     doNorm = True
     dims = (dim, dim, dim)
