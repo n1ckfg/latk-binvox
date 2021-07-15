@@ -10,8 +10,8 @@ argv = sys.argv
 argv = argv[argv.index("--") + 1:] # get all args after "--"
 
 inputPath = argv[0]
+dim = int(argv[1])
 
-dim = 256
 drawReps = dim #* dim 
 allPoints = []
 numCentroids = 40
