@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-import scipy.ndimage
+import scipy.ndimage as nd
 from latk.latk import *
 from binvox_rw.binvox_rw import *
 from kmeans import *
@@ -41,11 +41,7 @@ def main():
     saveBinvox = True
     saveH5 = True
 
-    doFill = False
-    #doDilate = True
-    dilateReps = 10
-    #doErode = True
-    erodeReps = 2
+    #doFill = False   
     doClean = False
     doNorm = True
     dims = (dim, dim, dim)
@@ -108,6 +104,22 @@ def main():
     url2a = url + "-fill.binvox"
     url2b = url + ".im"
 
+    # ~ ~ ~   "thin" version filters   ~ ~ ~
+    for i in range(0, 0):
+        nd.binary_dilation(bv.data.copy(), output=bv.data)
+
+    for i in range(0, 1):
+        nd.sobel(bv.data.copy(), output=bv.data)
+
+    nd.median_filter(bv.data.copy(), size=3, output=bv.data)
+
+    for i in range(0, 1):
+        nd.laplace(bv.data.copy(), output=bv.data)
+
+    for i in range(0, 0):
+        nd.binary_erosion(bv.data.copy(), output=bv.data)
+    # ~ ~ ~   ~ ~ ~   ~ ~ ~   ~ ~ ~
+
     if (saveBinvox == True):
         print("Writing to: " + url1a)
         saveAsBinvox(bv, url1a)
@@ -116,7 +128,9 @@ def main():
         print("Writing to: " + url1b)
         saveAsH5(bv, url1b)
 
-    kmeans = Kmeans(allPoints, numCentroids)
+    '''
+    if (doFill == True):
+        kmeans = Kmeans(allPoints, numCentroids)
 
     while (doFill == True):
         if (kmeans.ready == False):
@@ -131,16 +145,23 @@ def main():
                         drawLine(data, dims, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2])
 
             doFill = False
+    '''
 
-    if (dilateReps > 0):
-        print("Dilating...")
-        for i in range(0, dilateReps):
-            scipy.ndimage.binary_dilation(bv.data.copy(), output=bv.data)
+    # ~ ~ ~   "fat" version filters   ~ ~ ~
+    for i in range(0, 0):
+        nd.binary_dilation(bv.data.copy(), output=bv.data)
 
-    if (erodeReps > 0):
-        print("Eroding...")
-        for i in range(0, erodeReps):
-            scipy.ndimage.binary_erosion(bv.data.copy(), output=bv.data)
+    for i in range(0, 3):
+        nd.sobel(bv.data.copy(), output=bv.data)
+
+    nd.median_filter(bv.data.copy(), size=2, output=bv.data)
+
+    for i in range(0, 2):
+        nd.laplace(bv.data.copy(), output=bv.data)
+
+    for i in range(0, 0):
+        nd.binary_erosion(bv.data.copy(), output=bv.data)
+    # ~ ~ ~   ~ ~ ~   ~ ~ ~   ~ ~ ~
 
     if (saveBinvox == True):
         print("Writing to: " + url2a)
