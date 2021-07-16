@@ -104,7 +104,7 @@ def main():
     url2a = url + "-fill.binvox"
     url2b = url + ".im"
 
-    # ~ ~ ~   "thin" version filters   ~ ~ ~
+    # ~ ~ ~   "THIN" version filters   ~ ~ ~
     for i in range(0, 1):
         nd.binary_dilation(bv.data.copy(), output=bv.data)
 
@@ -113,10 +113,10 @@ def main():
 
     nd.median_filter(bv.data.copy(), size=2, output=bv.data)
 
-    for i in range(0, 1):
+    for i in range(0, 0):
         nd.laplace(bv.data.copy(), output=bv.data)
 
-    for i in range(0, 1):
+    for i in range(0, 0):
         nd.binary_erosion(bv.data.copy(), output=bv.data)
     # ~ ~ ~   ~ ~ ~   ~ ~ ~   ~ ~ ~
 
@@ -147,8 +147,8 @@ def main():
             doFill = False
     '''
 
-    # ~ ~ ~   "fat" version filters   ~ ~ ~
-    for i in range(0, 0):
+    # ~ ~ ~   "FAT" version filters   ~ ~ ~
+    for i in range(0, 1):
         nd.binary_dilation(bv.data.copy(), output=bv.data)
 
     for i in range(0, 3):
