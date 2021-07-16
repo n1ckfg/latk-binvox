@@ -105,18 +105,18 @@ def main():
     url2b = url + ".im"
 
     # ~ ~ ~   "thin" version filters   ~ ~ ~
-    for i in range(0, 0):
+    for i in range(0, 1):
         nd.binary_dilation(bv.data.copy(), output=bv.data)
 
-    for i in range(0, 1):
+    for i in range(0, 0):
         nd.sobel(bv.data.copy(), output=bv.data)
 
-    nd.median_filter(bv.data.copy(), size=3, output=bv.data)
+    nd.median_filter(bv.data.copy(), size=2, output=bv.data)
 
     for i in range(0, 1):
         nd.laplace(bv.data.copy(), output=bv.data)
 
-    for i in range(0, 0):
+    for i in range(0, 1):
         nd.binary_erosion(bv.data.copy(), output=bv.data)
     # ~ ~ ~   ~ ~ ~   ~ ~ ~   ~ ~ ~
 
@@ -154,7 +154,7 @@ def main():
     for i in range(0, 3):
         nd.sobel(bv.data.copy(), output=bv.data)
 
-    nd.median_filter(bv.data.copy(), size=2, output=bv.data)
+    nd.median_filter(bv.data.copy(), size=4, output=bv.data)
 
     for i in range(0, 2):
         nd.laplace(bv.data.copy(), output=bv.data)
