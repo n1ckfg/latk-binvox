@@ -23,3 +23,13 @@ do
   python3 test.py -- $INPUT $DIMS
 done
 
+cd "$INPUT_DIR"
+
+mkdir hdf5
+mv *.im hdf5
+mv *.seg hdf5
+zip -r hdf5.zip hdf5
+
+mkdir binvox
+mv *.binvox binvox
+zip -r binvox.zip binvox
