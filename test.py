@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import scipy.ndimage as nd
-from latkpy import *
+from latkpy.latk import *
 from binvox_rw.binvox_rw import *
 from kmeans import *
 import h5py
