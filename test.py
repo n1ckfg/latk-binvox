@@ -64,7 +64,15 @@ def main():
     '''
     print("Reading from : " + inputPath)
 
-    la = Latk(inputPath)
+    la = None
+
+    inputPath_split = inputPath.split(".")
+    ext = inputPath_split[len(inputPath_split)-1].lower()
+    if (ext == "tilt"):
+        la = Latk()
+        la.readTiltBrush(inputPath)
+    else:
+        la = Latk(inputPath)
 
     if (doNorm):
         print("Normalizing...")
@@ -176,7 +184,7 @@ def saveAsBinvox(bv, url):
         bv.write(f)
 
 def saveAsH5(bv, url):
-    voxel_data = bv.data.astype(np.float)
+    voxel_data = bv.data.astype(float)
     f = h5py.File(url, 'w')
     # more compression options: https://docs.h5py.org/en/stable/high/dataset.html
     f.create_dataset('data', data=voxel_data, compression='gzip')

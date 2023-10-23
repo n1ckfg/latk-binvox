@@ -10,7 +10,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $DIR
 
-INPUT_DIR="test_set"
+INPUT_DIR="examples"
 
 DIMS=128
 
@@ -18,7 +18,7 @@ rm "$INPUT_DIR"/*.seg
 rm "$INPUT_DIR"/*.im
 rm "$INPUT_DIR"/*.binvox
 
-for INPUT in "$INPUT_DIR"/*.latk
+for INPUT in "$INPUT_DIR"/*.tilt
 do
   python3 test.py -- $INPUT $DIMS
 done
