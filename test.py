@@ -43,7 +43,7 @@ def main():
 
     #doFill = False   
     doClean = False
-    doNorm = True
+    doNorm = False
     dims = (dim, dim, dim)
     data = np.zeros((dims[0], dims[1], dims[2]), dtype=bool)
     translate = (0, 0, 0)
