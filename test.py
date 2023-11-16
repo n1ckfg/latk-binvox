@@ -5,12 +5,17 @@ from latkpy.latk import *
 from binvox_rw.binvox_rw import *
 from kmeans import *
 import h5py
+import threading
+import queue
+import os
 
 argv = sys.argv
 argv = argv[argv.index("--") + 1:] # get all args after "--"
 
 inputPath = argv[0]
 dim = int(argv[1])
+
+numThreads = 5
 
 drawReps = dim #* dim 
 allPoints = []
@@ -37,7 +42,21 @@ def drawLine(data, dims, x1, y1, z1, x2, y2, z2):
         z = int(p3[2] * (dims[2]-1))
         data[x][y][z] = True
 
-def main():
+def saveAsBinvox(bv, url):
+    with open(url, 'wb') as f:
+        bv.write(f)
+
+def saveAsH5(bv, url):
+    voxel_data = bv.data.astype(float)
+    f = h5py.File(url, 'w')
+    # more compression options: https://docs.h5py.org/en/stable/high/dataset.html
+    f.create_dataset('data', data=voxel_data, compression='gzip')
+    f.flush()
+    f.close()    
+
+# ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+def process_file(file_path):
     saveBinvox = True
     saveH5 = True
 
@@ -62,17 +81,17 @@ def main():
             for z in range(0, len(data[x][y])):
                 data[x][y][z] = True
     '''
-    print("Reading from : " + inputPath)
+    print("Reading from : " + file_path)
 
     la = None
 
-    inputPath_split = inputPath.split(".")
-    ext = inputPath_split[len(inputPath_split)-1].lower()
+    file_path_split = file_path.split(".")
+    ext = file_path_split[len(file_path_split)-1].lower()
     if (ext == "tilt"):
         la = Latk()
-        la.readTiltBrush(inputPath)
-    else:
-        la = Latk(inputPath)
+        la.readTiltBrush(file_path)
+    elif (ext == "latk" or ext == "json"):
+        la = Latk(file_path)
 
     if (doNorm):
         print("Normalizing...")
@@ -103,7 +122,7 @@ def main():
                     data[x][y][z] = True
                 '''
     url = ""
-    outputPathArray = inputPath.split(".")
+    outputPathArray = file_path.split(".")
     for i in range(0, len(outputPathArray)-1):
         url += outputPathArray[i]
 
@@ -179,16 +198,38 @@ def main():
         print("Writing to: " + url2b)
         saveAsH5(bv, url2b)
 
-def saveAsBinvox(bv, url):
-    with open(url, 'wb') as f:
-        bv.write(f)
+def worker(file_queue):
+    print("Initializing worker")
+    # Take a file from the queue and process it.
+    while True:
+        try:
+            file_path = file_queue.get_nowait()
+        except queue.Empty:
+            break  # If the queue is empty, exit the thread
 
-def saveAsH5(bv, url):
-    voxel_data = bv.data.astype(float)
-    f = h5py.File(url, 'w')
-    # more compression options: https://docs.h5py.org/en/stable/high/dataset.html
-    f.create_dataset('data', data=voxel_data, compression='gzip')
-    f.flush()
-    f.close()    
+        process_file(file_path)
+        file_queue.task_done()
+
+def process_directory(directory, num_threads):
+    # Create a queue and add all file paths in the directory to it
+    file_queue = queue.Queue()
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            file_queue.put(file_path)
+
+    # Start threads
+    threads = []
+    for _ in range(num_threads):
+        thread = threading.Thread(target=worker, args=(file_queue,))
+        thread.start()
+        threads.append(thread)
+
+    # Wait for threads to finish
+    for thread in threads:
+        thread.join()
+
+def main():
+    process_directory(inputPath, numThreads)
 
 main()

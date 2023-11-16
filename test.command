@@ -18,10 +18,7 @@ rm "$INPUT_DIR"/*.seg
 rm "$INPUT_DIR"/*.im
 rm "$INPUT_DIR"/*.binvox
 
-for INPUT in "$INPUT_DIR"/*.latk
-do
-  python3 test.py -- $INPUT $DIMS
-done
+python3 test.py -- $INPUT_DIR $DIMS
 
 cd "$INPUT_DIR"
 

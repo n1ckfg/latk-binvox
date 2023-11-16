@@ -3,6 +3,9 @@
 *.json
 *.zip
 *.binvox
+*.latk
+*.im
+*.seg
 *.obj
 test_set/*
 .DS_Store
