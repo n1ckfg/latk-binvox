@@ -9,4 +9,7 @@
 *.obj
 test_set/*
 .DS_Store
+*.latk
+*.im
+*.seg
 

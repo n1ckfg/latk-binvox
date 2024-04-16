@@ -58,7 +58,7 @@ def saveAsH5(bv, url):
 
 def process_file(file_path):
     saveBinvox = True
-    saveH5 = True
+    saveH5 = False
 
     #doFill = False   
     doClean = False
